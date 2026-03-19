@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/veiculos" , produces = "")
+@RequestMapping(value = "/veiculos")
 @Slf4j
 @Tag(name = "Veículo" , description = "Controller para CRUD veículos")
 public class VeiculoController {
