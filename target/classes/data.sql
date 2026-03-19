@@ -23,6 +23,10 @@ CREATE TABLE pessoas (
 
 );
 
+INSERT INTO pessoas (nome,cpf,telefone,email )
+VALUES ('Deivis Vargas', '25054877478' , '988144555' , 'deivisVp@yahoo.com.br');
+
+
 CREATE TABLE alugueis (
 
     id BIGINT AUTO_INCREMENT PRIMARY KEY ,
@@ -34,6 +38,7 @@ CREATE TABLE alugueis (
     FOREIGN KEY (pessoa_id) references pessoas(id),
     FOREIGN KEY (veiculo_id) references veiculos(id)
 
-
-
 );
+
+INSERT INTO alugueis (pessoa_id,veiculo_id,data_inicio,data_fim , valor_total )
+VALUES (1,1, '2026-01-01' , '2026-01-10' , 1200);

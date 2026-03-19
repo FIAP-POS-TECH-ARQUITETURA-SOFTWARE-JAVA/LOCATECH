@@ -1,4 +1,5 @@
 package br.com.fiap.locatech.locatech.repositories;
+import br.com.fiap.locatech.locatech.dtos.AluguelRequestDTO;
 import br.com.fiap.locatech.locatech.entities.Aluguel;
 
 import java.util.List;

@@ -1,13 +1,18 @@
 package br.com.fiap.locatech.locatech.controllers;
 
 
+import br.com.fiap.locatech.locatech.dtos.AluguelRequestDTO;
 import br.com.fiap.locatech.locatech.entities.Aluguel;
+import br.com.fiap.locatech.locatech.entities.Veiculo;
 import br.com.fiap.locatech.locatech.services.AluguelService;
+import br.com.fiap.locatech.locatech.services.VeiculoService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +22,12 @@ import java.util.Optional;
 public class AluguelController {
 
     private final AluguelService aluguelService;
+    private final VeiculoService veiculoService;
 
 
-    public AluguelController(AluguelService aluguelService) {
+    public AluguelController(AluguelService aluguelService, VeiculoService veiculoService) {
         this.aluguelService = aluguelService;
+        this.veiculoService = veiculoService;
     }
 
     @GetMapping
@@ -44,10 +51,10 @@ public class AluguelController {
 
     @PostMapping
     public ResponseEntity<Void> saveAluguel(
-            @RequestBody Aluguel aluguel
+            @RequestBody @Valid AluguelRequestDTO aluguel
     ){
         log.info("POST/alugueis " );
-        aluguelService.saveAluguel(aluguel);
+        aluguelService.saveAluguel(calcularAluguel(aluguel));
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
@@ -70,6 +77,19 @@ public class AluguelController {
         log.info("DELETE/alugueis " );
         aluguelService.deleteAluguel(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+
+    }
+
+    private Aluguel calcularAluguel(AluguelRequestDTO aluguelRequestDTO){
+
+        Veiculo veiculo = veiculoService.findVeiculoById(aluguelRequestDTO.veiculoId())
+                .orElseThrow(
+                        () -> new RuntimeException("Veículo não encontrado")
+                );
+        var quantidadeDias = BigDecimal.valueOf(aluguelRequestDTO.dataFim().getDayOfYear() - aluguelRequestDTO.dataInicio().getDayOfYear());
+        var valor = veiculo.getValor().multiply(quantidadeDias)  ;
+
+        return  new Aluguel(aluguelRequestDTO, valor);
 
     }
 

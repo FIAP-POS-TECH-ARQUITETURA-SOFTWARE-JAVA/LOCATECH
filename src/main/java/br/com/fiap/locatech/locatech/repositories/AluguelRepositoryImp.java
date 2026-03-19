@@ -1,6 +1,7 @@
 package br.com.fiap.locatech.locatech.repositories;
 
 import br.com.fiap.locatech.locatech.entities.Aluguel;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Hidden
 public class AluguelRepositoryImp implements AluguelRepository {
 
 
@@ -22,13 +24,13 @@ public class AluguelRepositoryImp implements AluguelRepository {
     @Override
     public Optional<Aluguel> findById(Long id) {
         return this.jdbcClient
-                .sql("Select a.id, a.pessoa_id , a.veiculo , a.data_inico , a.data_fim , a.valor , " +
-                        "p.nome AS pessoa_nome , p.cpf AS pessoa_cpf , " +
-                        "v.modelo AS veiculo_modelo , v.placa AS veiculo_placa" +
-                        "FROM alugueis a " +
-                        "INNER JOIN pessoas p on a.pessoa_id = p.id" +
-                        "INNER JOIN veiculos v on a.veiculo_id = v.id" +
-                        "WHERE a.id = ?"
+                .sql("Select a.id, a.pessoa_id , a.veiculo_id , a.data_inicio , a.data_fim , a.valor_total , " +
+                                "p.nome AS pessoa_nome , p.cpf AS pessoa_cpf , " +
+                                "v.modelo AS veiculo_modelo , v.placa AS veiculo_placa " +
+                                "FROM alugueis a " +
+                                "INNER JOIN pessoas p on a.pessoa_id = p.id " +
+                                "INNER JOIN veiculos v on a.veiculo_id = v.id " +
+                        "WHERE a.id = :id "
 
                 )
                 .param("id" , id)
@@ -40,13 +42,13 @@ public class AluguelRepositoryImp implements AluguelRepository {
     @Override
     public List<Aluguel> findAll(int size, int offset) {
         return this.jdbcClient
-                .sql("Select a.id, a.pessoa_id , a.veiculo , a.data_inico , a.data_fim , a.valor , " +
+                .sql("Select a.id, a.pessoa_id , a.veiculo_id , a.data_inicio , a.data_fim , a.valor_total , " +
                         "p.nome AS pessoa_nome , p.cpf AS pessoa_cpf , " +
-                        "v.modelo AS veiculo_modelo , v.placa AS veiculo_placa" +
+                        "v.modelo AS veiculo_modelo , v.placa AS veiculo_placa " +
                         "FROM alugueis a " +
-                        "INNER JOIN pessoas p on a.pessoa_id = p.id" +
-                        "INNER JOIN veiculos v on a.veiculo_id = v.id" +
-                        "LIMIT :size OFFSET :offset"
+                        "INNER JOIN pessoas p on a.pessoa_id = p.id " +
+                        "INNER JOIN veiculos v on a.veiculo_id = v.id " +
+                        "LIMIT :size OFFSET :offset "
 
                 )
                 .param("size" , size)

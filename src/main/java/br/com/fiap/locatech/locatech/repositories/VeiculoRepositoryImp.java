@@ -1,6 +1,7 @@
 package br.com.fiap.locatech.locatech.repositories;
 
 import br.com.fiap.locatech.locatech.entities.Veiculo;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Hidden
 public class VeiculoRepositoryImp implements VeiculoRepository {
 
 
